@@ -23,6 +23,7 @@ public:
 	enum { bean, sunflower, plant_num };
 
 	IMAGE bars[plant_num];
+	Animation* m_PlantAnimation;
 	Animation* m_ZombieAnimation;
 
 	ExMessage msg;

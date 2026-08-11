@@ -6,7 +6,6 @@
 #include "tools.h"
 
 using namespace std;
-Plant* p1;
 
 Scene::Scene()//场景初始化
 {
@@ -27,45 +26,14 @@ Scene::Scene()//场景初始化
 			m_PlantTable[i][j] = NULL;
 		}
 
-	Animation* PlantAnimation = new Animation();
-	PlantAnimation->setInterval(95);//设置动画频率
+	m_PlantAnimation = new Animation();
+	m_PlantAnimation->setInterval(95);//设置动画频率
 	for (int i = 1; i <= 13; i++)
 	{
 		char buff[200] = { 0 };
 		sprintf(buff, "pic/plant/bean_shooter/%d.png", i);
-		PlantAnimation->addImage(buff);
+		m_PlantAnimation->addImage(buff);
 	}//创建一个植物动画
-
-
-	//m_PlantTable[row][col]->setAnimation(*PlantAnimation);
-	//m_PlantTable[row][col]->startAnimation();//默认开启
-
-
-
-
-
-	//for(int i=0;i<3;i++)
-	//	for (int j = 0; j < 8; j++)
-	//	{
-	//		Plant* pl = new Plant("pic/plant/bean_shooter/1.png");
-	//		m_PlantTable[i][j] = pl;
-	//		Vec2 v = Vec2(255+82*j, 190+100*i);
-
-	//		m_PlantTable[i][j]->setPosition(v);
-	//		m_PlantTable[i][j]->setAnimation(*PlantAnimation);
-	//		m_PlantTable[i][j]->startAnimation();//默认开启
-	//		//作为信号指向其他函数
-
-
-	//	}//初始化植物(旧)
-
-
-
-
-	/*m_Zombie = new Zombie("pic/zombie/zm/0.png");
-	Vec2 v1 = Vec2(910, 130);
-	m_Zombie->setPosition(v1);*///测试
-
 
 	m_ZombieAnimation = new Animation();
 	m_ZombieAnimation->setInterval(95);
@@ -96,7 +64,12 @@ void Scene::drawTick()//场景实现
 	putimagePNG(258, 0, &barImg);
 
 	drawPlant_Mouse(selected, current);
-	m_PlantTable[row][col]=drawPlant(planted, v);
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 9; j++)
+		{
+			if (m_PlantTable[i][j])
+				m_PlantTable[i][j]->drawTick();
+		}//绘制已种植的植物
 
 
 	for (int i = 0; i < plant_num; i++)
@@ -120,15 +93,29 @@ void Scene::eventTick(double a)
 
 	userClick();//为实现移动和种植提供坐标帮助
 
-	/*m_PlantTable[row][col]->eventTick(a);*/
-	//for (int i = 0; i < 3; i++)
-	//	for (int j = 0; j < 9; j++)
-	//	{
-	//		if (m_PlantTable[i][j])
-	//		{
-	//			m_PlantTable[i][j]->eventTick(a);
-	//		}
-	//	}//植物进入事件循环
+	if (planted >= 0)
+	{
+		Plant* plant = drawPlant(planted, v);
+		if (plant)
+		{
+			if (planted == bean)
+			{
+				plant->setAnimation(*m_PlantAnimation);
+				plant->startAnimation(true);
+			}
+			m_PlantTable[row][col] = plant;
+			planted = -1;
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 9; j++)
+		{
+			if (m_PlantTable[i][j])
+			{
+				m_PlantTable[i][j]->eventTick(a);
+			}
+		}//植物进入事件循环
 
 
 	for(int i=0;i<3;i++)
@@ -246,14 +233,19 @@ void Scene::userClick()
 		}
 		else if (msg.message == WM_LBUTTONUP)
 		{
-			col = (msg.x - 250) / 87;
-			row = (msg.y - 180) / 108;
-			v.x = 255 + 82 * col;
-			v.y = 190 + 100 * row;
-			cout << v.x << ',' << v.y << endl;
-			planted = selected;
-
-			//cout << planted << endl;
+			if (selected >= 0)
+			{
+				col = (msg.x - 250) / 87;
+				row = (msg.y - 180) / 108;
+				if (row >= 0 && row < 3 && col >= 0 && col < 9)
+				{
+					v.x = 255 + 82 * col;
+					v.y = 190 + 100 * row;
+					cout << v.x << ',' << v.y << endl;
+					planted = selected;
+				}
+			}
+			/*cout << planted << endl;*/
 			status = 0;
 			selected = -1;
 		}
