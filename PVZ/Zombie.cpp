@@ -22,8 +22,8 @@ void Zombie::drawTick()
 
 
 	Rect rect = getBoundingBox();
-	setlinecolor(RED);
-	setlinestyle(PS_SOLID, 3);
+	setlinecolor(TRANSPARENT);
+	//setlinestyle(PS_SOLID, 3);
 	rectangle(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);//´´½¨Åö×²Ïä
 }
 

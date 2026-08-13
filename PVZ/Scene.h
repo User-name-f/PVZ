@@ -25,6 +25,7 @@ public:
 	IMAGE bars[plant_num];
 	Animation* m_PlantAnimation;
 	Animation* m_ZombieAnimation;
+	Animation* s_PlantAnimation;
 
 	ExMessage msg;
 	int selected = -1;//¿¨ÅÆÎ»

@@ -17,7 +17,7 @@ public:
 	void setPosition(Vec2& pos);
 	void setAnimation(Animation& ani);
 	void startAnimation(bool isStartAni =true);
-	//Rect getBoundingBox();//得到碰撞箱
+	Rect getBoundingBox();//得到碰撞箱
 
 
 	IMAGE m_Image;

@@ -33,7 +33,20 @@ Scene::Scene()//场景初始化
 		char buff[200] = { 0 };
 		sprintf(buff, "pic/plant/bean_shooter/%d.png", i);
 		m_PlantAnimation->addImage(buff);
-	}//创建一个植物动画
+	}//创建一个豌豆动画
+
+
+
+	s_PlantAnimation = new Animation();
+	s_PlantAnimation->setInterval(110);//设置动画频率
+	for (int i = 1; i <= 18; i++)
+	{
+		char buff[200] = { 0 };
+		sprintf(buff, "pic/plant/sunshine_producer/%d.png", i);
+		s_PlantAnimation->addImage(buff);
+	}//创建一个向日葵动画
+
+
 
 	m_ZombieAnimation = new Animation();
 	m_ZombieAnimation->setInterval(95);
@@ -103,6 +116,11 @@ void Scene::eventTick(double a)
 				plant->setAnimation(*m_PlantAnimation);
 				plant->startAnimation(true);
 			}
+			else if (planted == sunflower)
+			{
+				plant->setAnimation(*s_PlantAnimation);
+				plant->startAnimation(true);
+			}
 			m_PlantTable[row][col] = plant;
 			planted = -1;
 		}
@@ -125,24 +143,24 @@ void Scene::eventTick(double a)
 		}//僵尸进入事件循环
 
 
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	for (auto &zombie : m_Zombies[i])
-	//	{
-	//		bool is = false;
-	//		for (int j = 0; j < 9; j++)
-	//		{
-	//			if (m_PlantTable[i][j])
-	//				if (m_PlantTable[i][j]->getBoundingBox().isOverlay(zombie->getBoundingBox()))
-	//				{
-	//					is = true;
-	//					zombie->setIsMove(false);
-	//				}
-	//		}
-	//		if(!is)
-	//		zombie->setIsMove(true);//没碰到植物
-	//	}
-	//}//判断僵尸是否碰到了植物
+	for (int i = 0; i < 3; i++)
+	{
+		for (auto &zombie : m_Zombies[i])
+		{
+			bool is = false;
+			for (int j = 0; j < 9; j++)
+			{
+				if (m_PlantTable[i][j])
+					if (m_PlantTable[i][j]->getBoundingBox().isOverlay(zombie->getBoundingBox()))
+					{
+						is = true;
+						zombie->setIsMove(false);
+					}
+			}
+			if(!is)
+			zombie->setIsMove(true);//没碰到植物
+		}
+	}//判断僵尸是否碰到了植物
 
 
 	m_CreateZombieCount += a;

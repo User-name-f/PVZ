@@ -19,10 +19,10 @@ void Plant::drawTick()
 
 
 
-	//Rect rect = getBoundingBox();
-	setlinecolor(RED);
-	setlinestyle(PS_SOLID,3);
-	//rectangle(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);//创建碰撞箱
+	Rect rect = getBoundingBox();
+	/*setlinecolor(RED);
+	setlinestyle(PS_SOLID,3);*/
+	rectangle(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);//创建碰撞箱
 }
 
 void Plant::eventTick(double a)
@@ -53,10 +53,10 @@ void Plant::startAnimation(bool isStartAni)
 	m_IsStartAnimation = isStartAni;
 }
 
-//Rect Plant::getBoundingBox()
-//{
-//	return Rect(m_Position.x, m_Position.y, m_Image.getwidth(), m_Image.getheight());
-//
-//}
+Rect Plant::getBoundingBox()
+{
+	return Rect(m_Position.x, m_Position.y, m_Image.getwidth(), m_Image.getheight());
+
+}
 
 
