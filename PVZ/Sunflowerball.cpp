@@ -50,6 +50,9 @@ void Sunflowerball::eventTick(double a)
 	}
 	else if (offx)
 	{
+		double angle = atan((v_sun.y - 0) / (v_sun.x - 278));
+		offx = 4 * cos(angle);
+		offy = 4 * sin(angle);
 		v_sun.x -= offx;
 		v_sun.y -= offy;
 		if (v_sun.x <= 278 || v_sun.y <= 0)

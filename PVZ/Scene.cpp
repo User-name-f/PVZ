@@ -8,8 +8,10 @@
 
 #include "mmsystem.h"
 #pragma comment(lib,"winmm.lib")
+#include <math.h>
 using namespace std;
 
+int Scene::sunshine = 0;//阳光分数(静态成员需要在类外定义一次)
 Scene::Scene()//场景初始化
 {
 	loadimage(&m_BackgroundImg,"pic/bgi/bg.jpg");
@@ -326,7 +328,7 @@ void Scene::createSunflower()
 		{
 			if (sun[i].isUsed == false)
 			{
-				sun[i].v_sun.x = 278 + rand() % 722;//259-980
+				sun[i].v_sun.x = 278 + rand() % 700;//259-980
 				sun[i].v_sun.y = 0;
 				sun[i].dsty = 220 + rand() % 291;
 				sun[i].setAnimation(*sunflower_Animation);
@@ -353,7 +355,7 @@ void Scene::getSun(ExMessage*msg)
 
 				double dstx = 278;
 				double dsty = 0;
-				double angle = atan((dsty - sun[i].v_sun.y) / (dstx - sun[i].v_sun.x));
+				double angle = atan((sun[i].v_sun.y - dsty) / (sun[i].v_sun.x - dstx));
 				sun[i].offx = 4 * cos(angle);
 				sun[i].offy = 4 * sin(angle);
 				sun[i].isUsed = false;
