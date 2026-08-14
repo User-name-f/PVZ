@@ -19,10 +19,11 @@ void Plant::drawTick()
 
 
 
-	Rect rect = getBoundingBox();
+	//È¥³ıÅö×²Ïä±ß¿ò£º
+	//Rect rect = getBoundingBox();
 	/*setlinecolor(RED);
 	setlinestyle(PS_SOLID,3);*/
-	rectangle(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);//´´½¨Åö×²Ïä
+	//rectangle(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);//´´½¨Åö×²Ïä
 }
 
 void Plant::eventTick(double a)

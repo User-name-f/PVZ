@@ -4,6 +4,8 @@
 #include "Plant.h"
 #include "Zombie.h"
 #include <list>
+#include "Sunflowerball.h"
+#include "Vec2.h"
 class Scene
 {
 public:
@@ -14,6 +16,7 @@ public:
 	void drawPlant_Mouse(int type, Vec2 v2);
 	Plant* drawPlant(int type, Vec2 &v2);
 	void userClick();
+	void createSunflower();
 
 	IMAGE m_BackgroundImg;
 	Plant *m_PlantTable [3][9];
@@ -21,11 +24,13 @@ public:
 	int col=0;//列
 	IMAGE barImg;
 	enum { bean, sunflower, plant_num };
+	Sunflowerball sun[10];
 
 	IMAGE bars[plant_num];
 	Animation* m_PlantAnimation;
 	Animation* m_ZombieAnimation;
 	Animation* s_PlantAnimation;
+	Animation* sunflower_Animation;
 
 	ExMessage msg;
 	int selected = -1;//卡牌位
@@ -39,5 +44,10 @@ public:
 	/*Zombie *m_Zombie;*/  //测试
 
 	double m_CreateZombieCount = 0; //创建僵尸累加器(计时器)
+
+
+	int count = 0;
+	int temp = 400;
+	IMAGE sunFlower;
 };
 

@@ -4,6 +4,7 @@
 #include "Vec2.h"
 #include <string>
 #include "tools.h"
+#include "Sunflowerball.h"
 
 using namespace std;
 
@@ -11,6 +12,17 @@ Scene::Scene()//场景初始化
 {
 	loadimage(&m_BackgroundImg,"pic/bgi/bg.jpg");
 	loadimage(&barImg, "pic/bar5.png");
+
+	memset(sun, NULL, sizeof(sun));
+	sunflower_Animation = new Animation();
+	sunflower_Animation->setInterval(120);//设置动画频率
+	for (int i = 1; i <= 29; i++)
+	{
+		char buff[200] = { 0 };
+		sprintf(buff, "pic/sunshine/%d.png", i);
+		sunflower_Animation->addImage(buff);
+	}//创建一个太阳动画
+
 
 	char name[200] = { 0 };
 	for (int i = 1; i <= plant_num; i++)
@@ -75,6 +87,7 @@ void Scene::drawTick()//场景实现
 {
 	putimage(0, 0, &m_BackgroundImg);
 	putimagePNG(258, 0, &barImg);
+	createSunflower();
 
 	drawPlant_Mouse(selected, current);
 	for (int i = 0; i < 3; i++)
@@ -98,6 +111,12 @@ void Scene::drawTick()//场景实现
 		{
 			zombie->drawTick();
 		}//绘制僵尸
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (sun[i].isUsed)
+			sun[i].drawTick();
+	}//绘制阳光
 
 }
 
@@ -141,6 +160,13 @@ void Scene::eventTick(double a)
 		{
 			zombie->eventTick(a); 
 		}//僵尸进入事件循环
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (sun[i].isUsed)
+			sun[i].eventTick(a);
+	}
+
 
 
 	for (int i = 0; i < 3; i++)
@@ -269,6 +295,30 @@ void Scene::userClick()
 		}
 	}
 }
+
+
+void Scene::createSunflower()
+{
+	count++;
+	if (count >= temp) {
+		count = 0;
+		temp = 200 + rand() % 200;
+		for (int i = 0; i < 10; i++)
+		{
+			if (sun[i].isUsed == false)
+			{
+				sun[i].v_sun.x = 259 + rand() % 722;//259-980
+				sun[i].v_sun.y = 0;
+				sun[i].dsty = 220 + rand() % 291;
+				sun[i].setAnimation(*sunflower_Animation);
+				sun[i].startAnimation();
+				sun[i].isUsed = true;//标记已使用
+				break;//一次只生成一个阳光
+			}
+		}
+	}
+}
+
 
 
 //Vec2 v(255 + 82 * row, 190 + 100 * col);

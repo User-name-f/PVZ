@@ -132,6 +132,8 @@
     <ClCompile Include="Plant.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="scene_new.cpp" />
+    <ClCompile Include="Sunflowerball.cpp" />
     <ClCompile Include="tools.cpp" />
     <ClCompile Include="Vec2.cpp" />
     <ClCompile Include="Zombie.cpp" />
@@ -141,6 +143,8 @@
     <ClInclude Include="Plant.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="scene_new.h" />
+    <ClInclude Include="Sunflowerball.h" />
     <ClInclude Include="tools.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Zombie.h" />

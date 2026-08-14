@@ -19,12 +19,11 @@ void Zombie::drawTick()
 		putimagePNG(m_Position.x, m_Position.y, &m_Image);
 	}
 
-
-
-	Rect rect = getBoundingBox();
-	setlinecolor(TRANSPARENT);
+	//È¥³ýÅö×²Ïä±ß¿ò£º
+	//Rect rect = getBoundingBox();
+	//setlinecolor(TRANSPARENT);
 	//setlinestyle(PS_SOLID, 3);
-	rectangle(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);//´´½¨Åö×²Ïä
+	//rectangle(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);//´´½¨Åö×²Ïä
 }
 
 void Zombie::eventTick(double a)

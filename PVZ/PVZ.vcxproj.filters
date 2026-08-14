@@ -39,6 +39,12 @@
     <ClCompile Include="Rect.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="scene_new.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Sunflowerball.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -60,6 +66,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Zombie.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_new.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Sunflowerball.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

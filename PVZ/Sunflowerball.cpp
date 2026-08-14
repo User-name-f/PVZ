@@ -1,0 +1,62 @@
+#include "Sunflowerball.h"
+#include "iostream"
+#include "tools.h"
+
+Sunflowerball::Sunflowerball()
+{
+	loadimage(&sfb, "pic/sunshine/1.png");
+}
+
+void Sunflowerball::setAnimation(Animation& ani)
+{
+	s_Animation = &ani;
+}
+
+void Sunflowerball::startAnimation(bool isStartAni)
+{
+	s_IsStartAnimation = isStartAni;
+}
+
+void Sunflowerball::eventTick(double a)
+{
+	if (s_Animation == nullptr)
+		return;//动画未初始化时直接返回，避免空指针异常
+
+	count += a;
+	if (count >= s_Animation->getInterval())
+	{
+		flag++;
+		if (flag >= s_Animation->count())
+			flag = 0;
+		count = 0;
+	}
+
+	if (v_sun.y < dsty)
+	{
+			v_sun.y += 0.05 * a;//阳光下落
+	}
+	else if (v_sun.y >= dsty)
+	{
+		timer++;
+		if (timer >= 200)
+		{
+			isUsed = false;
+			timer = 0;
+		}
+	}
+}
+
+void Sunflowerball::drawTick()
+{
+	if (s_IsStartAnimation)
+	{
+		if (s_Animation != nullptr)
+			putimagePNG(v_sun.x, v_sun.y, &s_Animation->m_ImageArray[flag]);
+	}
+	else {
+		putimagePNG(v_sun.x, v_sun.y, &sfb);
+	}
+}
+
+
+
