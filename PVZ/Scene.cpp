@@ -6,12 +6,24 @@
 #include "tools.h"
 #include "Sunflowerball.h"
 
+#include "mmsystem.h"
+#pragma comment(lib,"winmm.lib")
 using namespace std;
 
 Scene::Scene()//场景初始化
 {
 	loadimage(&m_BackgroundImg,"pic/bgi/bg.jpg");
 	loadimage(&barImg, "pic/bar5.png");
+
+	LOGFONT f;
+	gettextstyle(&f);
+	f.lfHeight = 30;
+	f.lfWidth = 15;
+	strcpy(f.lfFaceName ,"Segoe UI Black");
+	f.lfQuality = ANTIALIASED_QUALITY;
+	settextstyle(&f);
+	setbkmode(TRANSPARENT);
+	setcolor(BLACK);
 
 	memset(sun, NULL, sizeof(sun));
 	sunflower_Animation = new Animation();
@@ -88,6 +100,9 @@ void Scene::drawTick()//场景实现
 	putimage(0, 0, &m_BackgroundImg);
 	putimagePNG(258, 0, &barImg);
 	createSunflower();
+	char scoreText[8];
+	sprintf_s(scoreText, sizeof(scoreText),"%d", sunshine);
+	outtextxy(285, 67, scoreText);
 
 	drawPlant_Mouse(selected, current);
 	for (int i = 0; i < 3; i++)
@@ -114,7 +129,7 @@ void Scene::drawTick()//场景实现
 
 	for (int i = 0; i < 10; i++)
 	{
-		if (sun[i].isUsed)
+		if (sun[i].isUsed || sun[i].offx)
 			sun[i].drawTick();
 	}//绘制阳光
 
@@ -163,7 +178,7 @@ void Scene::eventTick(double a)
 
 	for (int i = 0; i < 10; i++)
 	{
-		if (sun[i].isUsed)
+		if (sun[i].isUsed || sun[i].offx)
 			sun[i].eventTick(a);
 	}
 
@@ -267,6 +282,10 @@ void Scene::userClick()
 				selected = index;
 				status = 1;
 			}
+			else
+			{
+				getSun(&msg);
+			}
 		}
 		else if (msg.message == WM_MOUSEMOVE && status == 1)
 		{
@@ -307,15 +326,39 @@ void Scene::createSunflower()
 		{
 			if (sun[i].isUsed == false)
 			{
-				sun[i].v_sun.x = 259 + rand() % 722;//259-980
+				sun[i].v_sun.x = 278 + rand() % 722;//259-980
 				sun[i].v_sun.y = 0;
 				sun[i].dsty = 220 + rand() % 291;
 				sun[i].setAnimation(*sunflower_Animation);
 				sun[i].startAnimation();
+				sun[i].offx = 0;
+				sun[i].offy = 0;
 				sun[i].isUsed = true;//标记已使用
 				break;//一次只生成一个阳光
 			}
 		}
+	}
+}
+
+void Scene::getSun(ExMessage*msg)
+{
+	for (int i = 0; i < (sizeof(sun) / sizeof(sun[0])); i++)
+	{
+		if (sun[i].isUsed)
+		{
+			if (msg->x >= sun[i].v_sun.x && msg->x <= sun[i].v_sun.x + 79 && msg->y >= sun[i].v_sun.y &&
+				msg->y <= sun[i].v_sun.y + 79)
+			{
+				mciSendString("play pic/sunshine.mp3",0,0,0);
+
+				double dstx = 278;
+				double dsty = 0;
+				double angle = atan((dsty - sun[i].v_sun.y) / (dstx - sun[i].v_sun.x));
+				sun[i].offx = 4 * cos(angle);
+				sun[i].offy = 4 * sin(angle);
+				sun[i].isUsed = false;
+			}
+		}//
 	}
 }
 

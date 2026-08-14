@@ -17,6 +17,7 @@ public:
 	Plant* drawPlant(int type, Vec2 &v2);
 	void userClick();
 	void createSunflower();
+	void getSun(ExMessage *msg);
 
 	IMAGE m_BackgroundImg;
 	Plant *m_PlantTable [3][9];
@@ -44,10 +45,8 @@ public:
 	/*Zombie *m_Zombie;*/  //测试
 
 	double m_CreateZombieCount = 0; //创建僵尸累加器(计时器)
-
-
+	static int sunshine;
 	int count = 0;
 	int temp = 400;
-	IMAGE sunFlower;
 };
 

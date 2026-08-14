@@ -1,6 +1,7 @@
 #include "Sunflowerball.h"
 #include "iostream"
 #include "tools.h"
+#include "Scene.h"
 
 Sunflowerball::Sunflowerball()
 {
@@ -19,29 +20,43 @@ void Sunflowerball::startAnimation(bool isStartAni)
 
 void Sunflowerball::eventTick(double a)
 {
-	if (s_Animation == nullptr)
-		return;//动画未初始化时直接返回，避免空指针异常
+	if (isUsed)
+	{
+		if (s_Animation == nullptr)
+			return;//动画未初始化时直接返回，避免空指针异常
 
-	count += a;
-	if (count >= s_Animation->getInterval())
-	{
-		flag++;
-		if (flag >= s_Animation->count())
-			flag = 0;
-		count = 0;
-	}
-
-	if (v_sun.y < dsty)
-	{
-			v_sun.y += 0.05 * a;//阳光下落
-	}
-	else if (v_sun.y >= dsty)
-	{
-		timer++;
-		if (timer >= 200)
+		count += a;
+		if (count >= s_Animation->getInterval())
 		{
-			isUsed = false;
-			timer = 0;
+			flag++;
+			if (flag >= s_Animation->count())
+				flag = 0;
+			count = 0;
+		}
+
+		if (v_sun.y < dsty)
+		{
+			v_sun.y += 0.05 * a;//阳光下落
+		}
+		else if (v_sun.y >= dsty)
+		{
+			timer++;
+			if (timer >= 200)
+			{
+				isUsed = false;
+				timer = 0;
+			}
+		}
+	}
+	else if (offx)
+	{
+		v_sun.x -= offx;
+		v_sun.y -= offy;
+		if (v_sun.x <= 278 || v_sun.y <= 0)
+		{
+			offx = 0;
+			offy = 0;
+			Scene::sunshine += 25;
 		}
 	}
 }
@@ -57,6 +72,7 @@ void Sunflowerball::drawTick()
 		putimagePNG(v_sun.x, v_sun.y, &sfb);
 	}
 }
+
 
 
 

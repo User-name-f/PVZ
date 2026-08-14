@@ -21,5 +21,7 @@ public:
 	int timer = 0;
 	void eventTick(double a);
 	void drawTick();
+	double offx=0;
+	double offy=0;
 };
 
