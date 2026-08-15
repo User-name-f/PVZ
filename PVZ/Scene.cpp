@@ -389,20 +389,25 @@ void Scene::getSun(ExMessage*msg)
 }
 void Scene::shoot()
 {
-	int line[3] = { 0 };
-	for (int i = 0; i < 3; i++)
-	{
-			if (!m_Zombies[i].empty())//该行有僵尸才射击
-			{
-				line[i] = 1;
-			}
-	}
 	static int shootCount[3][9] = { 0 };//每个格子的射击计时器
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 9; j++)
 		{
-			if (m_PlantTable[i][j] && m_PlantTable[i][j]->style == bean && line[i])
+			if (m_PlantTable[i][j] && m_PlantTable[i][j]->style == bean)
 			{
+				//只对同行中位于植物右侧(前方)的僵尸射击，僵尸走到植物背后就停止
+				bool hasTarget = false;
+				for (auto& zombie : m_Zombies[i])
+				{
+					if (zombie->m_Position.x > m_PlantTable[i][j]->m_Position.x)
+					{
+						hasTarget = true;
+						break;
+					}
+				}
+				if (!hasTarget)
+					continue;
+
 				shootCount[i][j]++;
 				if (shootCount[i][j] >= 1000)
 				{
