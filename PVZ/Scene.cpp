@@ -149,7 +149,6 @@ void Scene::drawTick()//场景实现
 
 void Scene::eventTick(double a)
 {
-	shoot();
 	userClick();//为实现移动和种植提供坐标帮助
 
 	if (planted >= 0)
@@ -187,7 +186,7 @@ void Scene::eventTick(double a)
 	for(int i=0;i<3;i++)
 		for (auto& zombie : m_Zombies[i])
 		{
-			zombie->eventTick(a); 
+			zombie->eventTick(a);
 		}//僵尸进入事件循环
 
 	for (int i = 0; i < 10; i++)
@@ -241,10 +240,15 @@ void Scene::eventTick(double a)
 	{
 		if (bullet[i])
 		{
-			bullet[i]->eventTick(a,bullet[i]);
+			if (bullet[i]->eventTick(a))
+			{
+				delete bullet[i];
+				bullet[i] = NULL;//防止悬空指针
+			}
 		}
 	}
-	
+	shoot();
+
 }
 
 
@@ -383,40 +387,38 @@ void Scene::getSun(ExMessage*msg)
 		}//
 	}
 }
-
 void Scene::shoot()
 {
 	int line[3] = { 0 };
 	for (int i = 0; i < 3; i++)
 	{
-		if (sizeof(m_Zombies[i]))
-		{
-			line[i] = 1;
-		}
+			if (!m_Zombies[i].empty())//该行有僵尸才射击
+			{
+				line[i] = 1;
+			}
 	}
-	for(int i=0;i<3;i++)
+	static int shootCount[3][9] = { 0 };//每个格子的射击计时器
+	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 9; j++)
 		{
-			if (m_PlantTable[i][j]->style == bean && line[i])
+			if (m_PlantTable[i][j] && m_PlantTable[i][j]->style == bean && line[i])
 			{
-				static int count = 0;
-				count++;
-				if (count >= 200)
+				shootCount[i][j]++;
+				if (shootCount[i][j] >= 1000)
 				{
-					count = 0;
-					int max = sizeof(bullet) / sizeof(bullet[0]);
-					for (int k = 0; k < max; k++)
+					shootCount[i][j] = 0;
+					for (int k = 0; k < 100; k++)
 					{
-						if (bullet[k]==NULL)
+						if (bullet[k] == NULL)
 						{
-							Bullet* b = new Bullet(); 
-							b->x = m_PlantTable[i][j]->getPosition().x + 75;
-							b->y = m_PlantTable[i][j]->getPosition().y + 5;
+							Bullet* b = new Bullet();
+							b->x = (int)(m_PlantTable[i][j]->getPosition().x + 75);
+							b->y = (int)(m_PlantTable[i][j]->getPosition().y + 5);
 							b->isUsed = true;
-							int row = i;
+							b->speed = 5;
 							bullet[k] = b;
+							break;//一次只创建一颗子弹
 						}
-
 					}
 				}
 			}

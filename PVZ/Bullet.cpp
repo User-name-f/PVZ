@@ -14,21 +14,19 @@ void Bullet::drawtick()
 	putimagePNG(x, y, &bullet_normal);
 }
 
-void Bullet::eventTick(double a,Bullet *b)
+bool Bullet::eventTick(double a)
 {
-	static int count = 0;
 	count += a;
-	if (count >= 200)
+	if (count >= 50)
 	{
-		b->x += speed;
-		if (b->x > 1050)//最大宽
+		count = 0;
+		x += speed;
+		if (x > 1025)//最大宽
 		{
-			delete b;
-			b = NULL;
+			return true;//飞出屏幕，通知调用者删除
 		}
 	}
-
-
+	return false;
 }
 
 

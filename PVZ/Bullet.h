@@ -11,7 +11,8 @@ public:
 	bool isUsed = false;
 	Bullet();
 	void drawtick();
-	void eventTick(double a,Bullet *b);
-	int speed;
+	bool eventTick(double a);
+	int speed = 5;
+	int count = 0;
 };
 
