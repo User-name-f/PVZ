@@ -18,20 +18,24 @@ int main(void)
 	Scene_new *scene_new = new Scene_new;
 	Scene* scene = new Scene;
 
-	double fps = 1000.0 /120; ///后面会设置刷新频率，此处无用
+	//double fps = 1000.0 /120; ///后面会设置刷新频率，此处无用,不用修改
+
 	clock_t begin_time = clock(), end_time;
 	scene_new->scene_init();
 	BeginBatchDraw();
 	while (true)
 	{
 		end_time = clock();
-		if (double(end_time - begin_time) >= fps)
-		{
+
+		/*if (double(end_time - begin_time) >= fps)
+		{*/ //此处不必修改
+
 			scene->drawTick();
 			FlushBatchDraw();
 			scene->eventTick(double(end_time - begin_time));
 			begin_time = end_time;
-		}
+
+		//} //此处不必修改
 
 
 		//if (peekmessage(&msg))//得到消息

@@ -6,6 +6,7 @@
 #include <list>
 #include "Sunflowerball.h"
 #include "Vec2.h"
+#include "Bullet.h"
 class Scene
 {
 public:
@@ -18,6 +19,7 @@ public:
 	void userClick();
 	void createSunflower();
 	void getSun(ExMessage *msg);
+	void shoot();
 
 	IMAGE m_BackgroundImg;
 	Plant *m_PlantTable [3][9];
@@ -39,6 +41,7 @@ public:
 	int status = 0;//状态位
 	Vec2 current;//跟随鼠标位置
 	Vec2 v;
+	Bullet* bullet[100];
 
 	Animation* m_ZombieAttackAnimation;
 	list<Zombie*> m_Zombies[3];//僵尸结构
@@ -47,6 +50,6 @@ public:
 	double m_CreateZombieCount = 0; //创建僵尸累加器(计时器)
 	static int sunshine;
 	int count = 0;
-	int temp = 400;
+	int temp = 2000;
 };
 

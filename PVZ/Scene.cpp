@@ -25,11 +25,14 @@ Scene::Scene()//场景初始化
 	f.lfQuality = ANTIALIASED_QUALITY;
 	settextstyle(&f);
 	setbkmode(TRANSPARENT);
-	setcolor(BLACK);
+	setcolor(BLACK);//设置字体
+
 
 	memset(sun, NULL, sizeof(sun));
+	memset(bullet, NULL, sizeof(bullet));
+
 	sunflower_Animation = new Animation();
-	sunflower_Animation->setInterval(120);//设置动画频率
+	sunflower_Animation->setInterval(50);//设置动画频率
 	for (int i = 1; i <= 29; i++)
 	{
 		char buff[200] = { 0 };
@@ -64,7 +67,7 @@ Scene::Scene()//场景初始化
 
 
 	s_PlantAnimation = new Animation();
-	s_PlantAnimation->setInterval(110);//设置动画频率
+	s_PlantAnimation->setInterval(80);//设置动画频率
 	for (int i = 1; i <= 18; i++)
 	{
 		char buff[200] = { 0 };
@@ -135,11 +138,18 @@ void Scene::drawTick()//场景实现
 			sun[i].drawTick();
 	}//绘制阳光
 
+	for (int i = 0; i < 100; i++)
+	{
+		if (bullet[i])
+		{
+			bullet[i]->drawtick();
+		}
+	}
 }
 
 void Scene::eventTick(double a)
 {
-
+	shoot();
 	userClick();//为实现移动和种植提供坐标帮助
 
 	if (planted >= 0)
@@ -151,16 +161,18 @@ void Scene::eventTick(double a)
 			{
 				plant->setAnimation(*m_PlantAnimation);
 				plant->startAnimation(true);
+				plant->style = bean;
 			}
 			else if (planted == sunflower)
 			{
 				plant->setAnimation(*s_PlantAnimation);
 				plant->startAnimation(true);
+				plant->style = sunflower;
 			}
 			m_PlantTable[row][col] = plant;
 			planted = -1;
 		}
-	}
+	}//植物种植
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 9; j++)
@@ -207,7 +219,7 @@ void Scene::eventTick(double a)
 
 
 	m_CreateZombieCount += a;
-	if (m_CreateZombieCount >= 2000)
+	if (m_CreateZombieCount >= 5000)
 	{
 		Zombie *zombie = new Zombie("pic/zombie/zm/0.png");//初始化僵尸
 
@@ -216,13 +228,21 @@ void Scene::eventTick(double a)
 		zombie->startAnimation(true);
 		//作为信号指向其他函数
 
-		int row = rand() % 3;
+		zombie->row = rand() % 3;
 
-		Vec2 v1 = Vec2(910, 150+row *100);
+		Vec2 v1 = Vec2(910, 150+ zombie->row *100);
 		zombie->setPosition(v1);
-		m_Zombies[row].push_back(zombie);
+		m_Zombies[zombie->row].push_back(zombie);
 
 		m_CreateZombieCount = 0;
+	}
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (bullet[i])
+		{
+			bullet[i]->eventTick(a,bullet[i]);
+		}
 	}
 	
 }
@@ -318,12 +338,12 @@ void Scene::userClick()
 }
 
 
-void Scene::createSunflower()
+void Scene::createSunflower()//创建阳光
 {
 	count++;
 	if (count >= temp) {
 		count = 0;
-		temp = 200 + rand() % 200;
+		temp = 2000 + rand() % 500;
 		for (int i = 0; i < 10; i++)
 		{
 			if (sun[i].isUsed == false)
@@ -356,12 +376,51 @@ void Scene::getSun(ExMessage*msg)
 				double dstx = 278;
 				double dsty = 0;
 				double angle = atan((sun[i].v_sun.y - dsty) / (sun[i].v_sun.x - dstx));
-				sun[i].offx = 4 * cos(angle);
-				sun[i].offy = 4 * sin(angle);
+				sun[i].offx = 1 * cos(angle);
+				sun[i].offy = 1 * sin(angle);
 				sun[i].isUsed = false;
 			}
 		}//
 	}
+}
+
+void Scene::shoot()
+{
+	int line[3] = { 0 };
+	for (int i = 0; i < 3; i++)
+	{
+		if (sizeof(m_Zombies[i]))
+		{
+			line[i] = 1;
+		}
+	}
+	for(int i=0;i<3;i++)
+		for (int j = 0; j < 9; j++)
+		{
+			if (m_PlantTable[i][j]->style == bean && line[i])
+			{
+				static int count = 0;
+				count++;
+				if (count >= 200)
+				{
+					count = 0;
+					int max = sizeof(bullet) / sizeof(bullet[0]);
+					for (int k = 0; k < max; k++)
+					{
+						if (bullet[k]==NULL)
+						{
+							Bullet* b = new Bullet(); 
+							b->x = m_PlantTable[i][j]->getPosition().x + 75;
+							b->y = m_PlantTable[i][j]->getPosition().y + 5;
+							b->isUsed = true;
+							int row = i;
+							bullet[k] = b;
+						}
+
+					}
+				}
+			}
+		}
 }
 
 

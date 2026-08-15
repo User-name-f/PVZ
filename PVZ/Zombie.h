@@ -16,7 +16,7 @@ public:
 	Rect getBoundingBox();//µÃµ½Åö×²Ïä
 	void setIsMove(bool a);
 	void setAttackAnimation(Animation& ani);
-
+	int row;
 
 	bool m_IsMove = true;
 	IMAGE m_Image;

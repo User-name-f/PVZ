@@ -15,10 +15,11 @@ public:
 	void drawTick();
 	void eventTick(double a);
 	void setPosition(Vec2& pos);
+	Vec2 getPosition();
 	void setAnimation(Animation& ani);
 	void startAnimation(bool isStartAni =true);
 	Rect getBoundingBox();//µÃµ½Åö×²Ïä
-
+	int style;
 
 	IMAGE m_Image;
 	Vec2 m_Position;

@@ -44,6 +44,11 @@ void Plant::setPosition(Vec2& pos)
 	m_Position = pos;
 }
 
+Vec2 Plant::getPosition()
+{
+	return m_Position;
+}
+
 void Plant::setAnimation(Animation& ani)
 {
 	m_Animation = ani;
