@@ -17,6 +17,7 @@ public:
 	void setIsMove(bool a);
 	void setAttackAnimation(Animation& ani);
 	int row;
+	int z_health;
 
 	bool m_IsMove = true;
 	IMAGE m_Image;

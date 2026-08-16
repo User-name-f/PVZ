@@ -216,12 +216,30 @@ void Scene::eventTick(double a)
 		}
 	}//判断僵尸是否碰到了植物
 
+	for (int i = 0; i < 3; i++)
+	{
+		for (auto& zombie : m_Zombies[i])
+		{
+			bool is = false;
+			for (int j = 0; j < 100; j++)
+			{
+				if (bullet[j] && bullet[j]->row ==i)
+					if (bullet[j]->x == zombie->getBoundingBox().x)
+					{
+						is = true;
+						bullet[j]->isBlast =true;
+					}
+			}
+		}
+	}//判断僵尸是否碰到了植物
+
 
 	m_CreateZombieCount += a;
 	if (m_CreateZombieCount >= 5000)
 	{
 		Zombie *zombie = new Zombie("pic/zombie/zm/0.png");//初始化僵尸
 
+		zombie->z_health = 100;
 		zombie->setAnimation(*m_ZombieAnimation);
 		zombie->setAttackAnimation(*m_ZombieAttackAnimation);
 		zombie->startAnimation(true);
@@ -421,6 +439,7 @@ void Scene::shoot()
 							b->y = (int)(m_PlantTable[i][j]->getPosition().y + 5);
 							b->isUsed = true;
 							b->speed = 5;
+							b->row = i;
 							bullet[k] = b;
 							break;//一次只创建一颗子弹
 						}
